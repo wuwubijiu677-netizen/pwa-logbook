@@ -8,7 +8,7 @@
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
 
-  <!-- アイコン（311） -->
+  <!-- iOS / Android アイコン -->
   <link rel="apple-touch-icon" sizes="180x180" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
   <link rel="icon" type="image/png" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
 
@@ -26,132 +26,209 @@
     }
     form {
       max-width: 600px;
-      margin: 32px auto;
+      margin: 40px auto;
       background: #fff;
       padding: 24px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    h2 {
-      text-align: center;
-      margin-top: 24px;
-    }
     label {
       display: block;
       margin-top: 16px;
       font-weight: bold;
+      color: #333;
     }
-    input {
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"] {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
       font-size: 16px;
+      margin-top: 4px;
       border: 1px solid #ccc;
       border-radius: 6px;
       box-sizing: border-box;
     }
-    .inline {
+    .inline-group {
       display: flex;
       gap: 16px;
+      align-items: flex-end;
     }
-    .inline > div {
+    .inline-group > div {
       flex: 1;
+    }
+    .distance-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .distance-input input {
+      width: 7em;
+      text-align: right;
+    }
+    .unit {
+      font-size: 16px;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+    }
+    .toggle label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .toggle input {
+      display: none;
+    }
+    .slider {
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      left: 2px;
+      top: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    input:checked + .slider {
+      background-color: #2196f3;
+    }
+    input:checked + .slider::before {
+      transform: translateX(30px);
+    }
+    .result-text {
+      font-size: 14px;
+      color: #2196f3;
     }
     .hidden {
       display: none;
     }
-    button {
-      width: 100%;
-      margin-top: 24px;
-      padding: 14px;
-      font-size: 18px;
-      font-weight: bold;
+    fieldset {
+      background: #f0f4f8;
       border: none;
       border-radius: 8px;
-      background: #000;
+      padding: 16px;
+      margin-top: 24px;
+    }
+    legend {
+      font-weight: bold;
+      color: #333;
+    }
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #00bcd4, #0097a7);
       color: #fff;
-    }
-    button:active {
-      transform: scale(0.98);
-    }
-    @media (max-width: 480px) {
-      .inline {
-        flex-direction: column;
-      }
+      border: none;
+      font-weight: bold;
+      padding: 14px;
+      font-size: 18px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      margin-top: 24px;
     }
   </style>
 </head>
 
 <body onload="init()">
 
-<h2>業務の記録</h2>
+<h2 style="text-align:center;">業務の記録</h2>
 
 <form id="form">
 
-  <div class="inline">
+  <div class="inline-group">
     <div>
       <label>日付</label>
       <input type="date" id="date" required>
     </div>
     <div>
       <label>点呼時刻</label>
-      <input type="time" id="time" required>
+      <input type="time" id="callTime" required>
     </div>
   </div>
 
-  <label>
-    <input type="checkbox" id="afterToggle">
-    業務後点呼
-  </label>
-
-  <div id="beforeGroup">
-    <label>走行距離（運行前）</label>
-    <input type="number" id="before" min="0">
+  <div class="toggle">
+    <span>点呼区分</span>
+    <label>
+      <input type="checkbox" id="callTypeToggle">
+      <span class="slider"></span>
+      <span class="result-text" id="callTypeResult">業務前</span>
+    </label>
   </div>
 
-  <div id="afterGroup" class="hidden">
-    <label>走行距離（運行後）</label>
-    <input type="number" id="after" min="0">
+  <div id="distanceBeforeGroup">
+    <label>走行距離計（運行前）</label>
+    <div class="distance-input">
+      <input type="number" id="distanceBefore" min="0">
+      <span class="unit">km</span>
+    </div>
   </div>
 
-  <div id="totalGroup" class="hidden">
-    <label>当日の走行距離</label>
-    <input type="number" id="total" readonly>
+  <div id="distanceAfterGroup" class="hidden">
+    <label>走行距離計（運行後）</label>
+    <div class="distance-input">
+      <input type="number" id="distanceAfter" min="0">
+      <span class="unit">km</span>
+    </div>
   </div>
 
-  <button type="submit">保存（端末内）</button>
+  <div id="totalDistanceGroup" class="hidden">
+    <label>当日の総走行距離</label>
+    <div class="distance-input">
+      <input type="number" id="totalDistance" readonly>
+      <span class="unit">km</span>
+    </div>
+  </div>
+
+  <button type="submit">登録を保存する</button>
+
 </form>
 
 <script>
 function init() {
   const now = new Date();
   date.value = now.toISOString().slice(0,10);
-  time.value = now.toTimeString().slice(0,5);
+  callTime.value = now.toTimeString().slice(0,5);
 }
 
-afterToggle.addEventListener('change', () => {
-  const on = afterToggle.checked;
-  beforeGroup.classList.toggle('hidden', on);
-  afterGroup.classList.toggle('hidden', !on);
-  totalGroup.classList.toggle('hidden', !on);
+callTypeToggle.addEventListener('change', function () {
+  const isAfter = this.checked;
+  callTypeResult.textContent = isAfter ? '業務後' : '業務前';
+  distanceBeforeGroup.classList.toggle('hidden', isAfter);
+  distanceAfterGroup.classList.toggle('hidden', !isAfter);
+  totalDistanceGroup.classList.toggle('hidden', !isAfter);
 });
 
-function calc() {
-  const b = Number(before.value);
-  const a = Number(after.value);
-  total.value = (!isNaN(b) && !isNaN(a) && a >= b) ? (a - b) : '';
+function updateTotal() {
+  const b = parseFloat(distanceBefore.value);
+  const a = parseFloat(distanceAfter.value);
+  totalDistance.value =
+    (!isNaN(b) && !isNaN(a) && a >= b) ? (a - b).toFixed(1) : '';
 }
-before.oninput = calc;
-after.oninput = calc;
+distanceBefore.oninput = updateTotal;
+distanceAfter.oninput = updateTotal;
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  alert('保存しました（※GitHub Pages版は端末保存のみ）');
+  alert('保存しました（GitHub Pages版）');
   form.reset();
   init();
 });
 
-/* Service Worker */
+/* PWA */
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js');
 }
@@ -159,4 +236,5 @@ if ('serviceWorker' in navigator) {
 
 </body>
 </html>
+
 
