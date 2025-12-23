@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>業務記録フォーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 24px;
+      padding: 12px;
+      background: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0097a7;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>業務記録フォーム</h2>
+
+  <form action="https://docs.google.com/forms/d/e/1FAIpQLScTN3yAYwQK-jif1_A1YhcKr0XDKaqcKPxqdgvMGQQPfuaBig/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+
+    <label>日付</label>
+    <input type="date" name="entry.1111111111" required>
+
+    <label>点呼時刻</label>
+    <input type="time" name="entry.2222222222" required>
+
+    <label>点呼区分</label>
+    <select name="entry.3333333333">
+      <option value="業務前">業務前</option>
+      <option value="業務後">業務後</option>
+    </select>
+
+    <label>走行距離（運行前）</label>
+    <input type="number" name="entry.4444444444" min="0">
+
+    <label>走行距離（運行後）</label>
+    <input type="number" name="entry.5555555555" min="0">
+
+    <label>総走行距離</label>
+    <input type="number" name="entry.6666666666" min="0">
+
+    <label>アルコール検知器使用</label>
+    <select name="entry.7777777777">
+      <option value="未使用">未使用</option>
+      <option value="使用">使用</option>
+    </select>
+
+    <label>アルコール検査値（mg/L）</label>
+    <input type="number" step="0.01" name="entry.8888888888" min="0">
+
+    <label>健康状態</label>
+    <select name="entry.9999999999">
+      <option value="未確認">未確認</option>
+      <option value="良好">良好</option>
+    </select>
+
+    <label>業務内容</label>
+    <input type="text" name="entry.1010101010" required>
+
+    <label>点検項目（複数選択可）</label>
+    <label><input type="checkbox" name="entry.1212121212" value="タイヤ"> タイヤ</label>
+    <label><input type="checkbox" name="entry.1212121212" value="油脂類"> 油脂類</label>
+    <label><input type="checkbox" name="entry.1212121212" value="灯火類"> 灯火類</label>
+    <label><input type="checkbox" name="entry.1212121212" value="エンジン"> エンジン</label>
+
+    <button type="submit">送信</button>
+  </form>
+
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+</body>
+</html>
