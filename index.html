@@ -3,96 +3,270 @@
 <head>
   <meta charset="UTF-8">
   <title>業務の記録</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- iOS PWA 必須 -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="業務の記録">
-
-  <!-- テーマカラー -->
-  <meta name="theme-color" content="#000000">
-
-  <!-- iOS アイコン（強制） -->
-  <link rel="apple-touch-icon" sizes="180x180" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
-
-  <!-- 念押し用（iOSが拾いやすい） -->
-  <link rel="icon" type="image/png" sizes="192x192" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
-
-  <!-- manifest -->
+  <!-- ✅ PWA：manifest -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- ✅ iOS・Android用ロゴアイコン -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
+  <link rel="icon" type="image/png" href="https://aqua-drop.github.io/assets/311-banchi-icon.png">
+
+  <!-- ✅ アプリ風表示設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#000000">
 
   <style>
     body {
       font-family: system-ui, -apple-system;
       background: #f9f9f9;
       margin: 0;
-      padding: 12px;
-    }
-    h2 {
-      text-align: center;
+      padding: 0;
     }
     form {
       max-width: 600px;
-      margin: auto;
+      margin: 40px auto;
       background: #fff;
-      padding: 16px;
+      padding: 24px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     label {
       display: block;
-      margin-top: 12px;
+      margin-top: 16px;
       font-weight: bold;
+      color: #333;
     }
-    input {
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"] {
       width: 100%;
       padding: 10px;
       font-size: 16px;
       margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
       box-sizing: border-box;
     }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 14px;
-      font-size: 18px;
-      font-weight: bold;
-      background: #000;
-      color: #fff;
+    input[type="date"],
+    input[type="time"] {
+      min-width: 140px;
+    }
+    .inline-group {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+    }
+    .inline-group > div {
+      flex: 1;
+    }
+    .distance-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .distance-input input {
+      width: 7em;
+      text-align: right;
+    }
+    .unit {
+      font-size: 16px;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+    }
+    .toggle label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .toggle input {
+      display: none;
+    }
+    .slider {
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      left: 2px;
+      top: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    input:checked + .slider {
+      background-color: #2196f3;
+    }
+    input:checked + .slider::before {
+      transform: translateX(30px);
+    }
+    .result-text {
+      font-size: 14px;
+      color: #2196f3;
+    }
+    .hidden {
+      display: none;
+    }
+    fieldset {
+      background: #f0f4f8;
       border: none;
       border-radius: 8px;
+      padding: 16px;
+      margin-top: 24px;
+    }
+    legend {
+      font-weight: bold;
+      color: #333;
+    }
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #00bcd4, #0097a7);
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      padding: 14px;
+      font-size: 18px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background 0.3s;
+      margin-top: 24px;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #26c6da, #00acc1);
+    }
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 12px; }
+      form { padding: 16px; margin: 20px auto; }
+      .distance-input { flex-direction: column; align-items: flex-start; }
+      .distance-input input { width: 100%; text-align: left; }
+      .inline-group { flex-direction: column; }
     }
   </style>
 </head>
 
-<body>
+<body onload="init()">
 
-<h2>業務の記録</h2>
+<h2 style="text-align:center;">業務の記録</h2>
 
-<form>
-  <label>日付</label>
-  <input type="date">
+<form id="form">
 
-  <label>点呼時刻</label>
-  <input type="time">
+  <div class="inline-group">
+    <div>
+      <label for="date">日付</label>
+      <input type="date" id="date" required>
+    </div>
+    <div>
+      <label for="callTime">点呼時刻</label>
+      <input type="time" id="callTime" required>
+    </div>
+  </div>
 
-  <label>業務内容</label>
-  <input type="text" placeholder="例：配送業務">
+  <div class="toggle">
+    <span>点呼区分</span>
+    <label>
+      <input type="checkbox" id="callTypeToggle">
+      <span class="slider"></span>
+      <span class="result-text" id="callTypeResult">業務前</span>
+    </label>
+  </div>
+  <input type="hidden" id="callTypeHidden" value="業務前">
 
-  <button type="button">保存</button>
+  <div id="distanceBeforeGroup">
+    <label>走行距離計（運行前）</label>
+    <div class="distance-input">
+      <input type="number" id="distanceBefore" min="0">
+      <span class="unit">km</span>
+    </div>
+  </div>
+
+  <div id="distanceAfterGroup" class="hidden">
+    <label>走行距離計（運行後）</label>
+    <div class="distance-input">
+      <input type="number" id="distanceAfter" min="0">
+      <span class="unit">km</span>
+    </div>
+  </div>
+
+  <div id="totalDistanceGroup" class="hidden">
+    <label>当日の総走行距離</label>
+    <div class="distance-input">
+      <input type="number" id="totalDistance" readonly>
+      <span class="unit">km</span>
+    </div>
+  </div>
+
+  <button type="submit">登録を保存する</button>
+
 </form>
 
 <script>
-  // Service Worker 登録
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js');
-    });
-  }
+/* 初期日付・時刻 */
+function init() {
+  const now = new Date();
+  document.getElementById('date').value = now.toISOString().slice(0,10);
+  document.getElementById('callTime').value = now.toTimeString().slice(0,5);
+}
+
+/* 点呼区分切替 */
+document.getElementById('callTypeToggle').addEventListener('change', function () {
+  const isAfter = this.checked;
+  document.getElementById('callTypeResult').textContent = isAfter ? '業務後' : '業務前';
+  document.getElementById('callTypeHidden').value = isAfter ? '業務後' : '業務前';
+  document.getElementById('distanceBeforeGroup').classList.toggle('hidden', isAfter);
+  document.getElementById('distanceAfterGroup').classList.toggle('hidden', !isAfter);
+  document.getElementById('totalDistanceGroup').classList.toggle('hidden', !isAfter);
+});
+
+/* 走行距離計算 */
+function updateTotal() {
+  const b = parseFloat(distanceBefore.value);
+  const a = parseFloat(distanceAfter.value);
+  totalDistance.value = (!isNaN(b) && !isNaN(a) && a >= b) ? (a - b).toFixed(1) : '';
+}
+distanceBefore.oninput = updateTotal;
+distanceAfter.oninput = updateTotal;
+
+/* 保存 */
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  google.script.run.saveData({
+    date: date.value,
+    callTime: callTime.value,
+    callType: callTypeHidden.value,
+    distanceBefore: distanceBefore.value,
+    distanceAfter: distanceAfter.value,
+    totalDistance: totalDistance.value
+  });
+  alert('保存しました');
+  form.reset();
+  init();
+});
+
+/* ✅ Service Worker 登録（PWA必須） */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js');
+  });
+}
 </script>
 
 </body>
